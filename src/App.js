@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+const fs = window.require('fs')
+
 function App() {
+
+  useEffect(() => {
+    fs.readdir('./', (err, files) => {
+      files.forEach(file => console.log('file: ', file))
+    })
+  }, [])
   return (
     <div className="App">
       <header className="App-header">
