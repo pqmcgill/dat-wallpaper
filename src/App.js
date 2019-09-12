@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react';
+import fs from 'fs';
 import logo from './logo.svg';
 import './App.css';
-
-const fs = window.require('fs')
 
 function App() {
 
   useEffect(() => {
+    console.log('dirname', __dirname)
+    // example using native node dependencies in CRA
     fs.readdir('./', (err, files) => {
       files.forEach(file => console.log('file: ', file))
     })
   }, [])
+
   return (
     <div className="App">
       <header className="App-header">
@@ -31,4 +33,4 @@ function App() {
   );
 }
 
-export default App;
+export default App

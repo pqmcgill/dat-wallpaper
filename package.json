@@ -23,9 +23,7 @@
       "buildResources": "assets"
     }
   },
-  "dependencies": {
-    
-  },
+  "dependencies": {},
   "homepage": "./",
   "main": "public/electron.js",
   "scripts": {
@@ -33,7 +31,7 @@
     "build": "rescripts build",
     "test": "rescripts test",
     "eject": "react-scripts eject",
-    "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
     "pack": "yarn build && electron-builder --dir",
     "dist": "yarn build && electron-builder"
@@ -48,15 +46,15 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "electron-is-dev": "^1.1.0",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
-    "react-scripts": "3.1.1",
     "@rescripts/cli": "^0.0.12",
     "@rescripts/rescript-env": "^0.0.10",
     "concurrently": "^4.1.2",
     "electron": "^6.0.8",
     "electron-builder": "^21.2.0",
+    "electron-is-dev": "^1.1.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-scripts": "3.1.1",
     "typescript": "^3.6.3",
     "wait-on": "^3.3.0"
   }
