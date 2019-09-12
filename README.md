@@ -1,68 +1,59 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# DatWallpaper (WIP)
 
-## Available Scripts
+## TODO
 
-In the project directory, you can run:
+- [x] Boilerplate
+  - [x] CRA setup
+  - [x] rescripts for custom webpack config
+  - [x] allow native node imports (fs, hyperdrive, etc.) in application
+  - [x] npm scripts (dev, build, package, distribute)
+- [ ] Dynamically change wallpaper POC
+- [ ] UI
+  - [ ] display dat:// url with copy to clipboard action
+  - [ ] input for connecting to another wallpaper set via it's dat:// url
+  - [ ] local folder path configuration
+  - [ ] current file link
+    - [ ] if own file, click opens up file in default file manager via electron.shell api
+    - [ ] if other's file, click saves wallpaper and opens up file in default file manager
+  - [ ] basic network status information - nice to have
+- [ ] Data
+  - Memory
+    - Processed combined list of all wallpaper metadata found in the swarm
+    - Set of connected peers mapped to their wallpaper dat:// urls and content metadata
+  - Native drive
+    - Own list of saved wallpapers
+    - Current Wallpaper stored in a tmp folder
+  - Hyperdrive
+    - Own list of saved wallpapers
+- [ ] Algorithm
+  instantiate local drive or create if non existent 
+  instantiate peers as empty set
+  
+  loop
+    list all wallpapers from all peers including own
+    randomly select one
+    if valid image
+      render to screen
+      wait 1 minute
+      loop
+    else
+      loop
+  
+  on adding a new peer
+    if peers has peer
+      return
+    else
+      peers.add(peer)
+      let peer know about your dat:// url via extension message
+  
+  on peer announcing their dat:// url
+    if peers has peer
+      if the peer's url is already known
+        return
+      else
+        read metadata contents of remote wallpaper drive
+        update peer with url and metadata list
 
-### `npm start`
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
