@@ -21,7 +21,8 @@
     ],
     "directories": {
       "buildResources": "assets"
-    }
+    },
+    "extraResources": ["./bins/**/*"]
   },
   "dependencies": {},
   "homepage": "./",
@@ -56,6 +57,7 @@
     "react-dom": "^16.9.0",
     "react-scripts": "3.1.1",
     "typescript": "^3.6.3",
-    "wait-on": "^3.3.0"
+    "wait-on": "^3.3.0",
+    "app-root-dir": "^1.0.2"
   }
 }
