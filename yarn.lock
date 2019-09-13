@@ -8532,6 +8532,11 @@ pretty-format@^24.9.0:
     ansi-styles "^3.2.0"
     react-is "^16.8.4"
 
+pretty-hash@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/pretty-hash/-/pretty-hash-1.0.1.tgz#16e0579188def56bdb565892bcd05a5d65324807"
+  integrity sha1-FuBXkYje9WvbVliSvNBaXWUySAc=
+
 private@^0.1.6:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/private/-/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"

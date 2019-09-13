@@ -9,12 +9,12 @@
   - [x] npm scripts (dev, build, package, distribute)
 - [x] Dynamically change wallpaper POC
 - [ ] UI
-  - [ ] display dat:// url with copy to clipboard action
-  - [ ] input for connecting to another wallpaper set via it's dat:// url
-  - [ ] local folder path configuration
-  - [ ] current file link
-    - [ ] if own file, click opens up file in default file manager via electron.shell api
-    - [ ] if other's file, click saves wallpaper and opens up file in default file manager
+  - [x] display dat:// url with copy to clipboard action
+  - [x] input for connecting to another wallpaper set via it's dat:// url
+  - [x] local folder path configuration
+  - [x] current file link
+    - [x] if own file, click opens up file in default file manager via electron.shell api
+    - [x] if other's file, click saves wallpaper and opens up file in default file manager
   - [ ] basic network status information - nice to have
 - [ ] Data
   - Memory

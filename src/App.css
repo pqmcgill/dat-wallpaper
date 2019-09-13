@@ -1,1 +1,16 @@
+.App {
+  padding: 1rem;
+}
 
+.btn-link {
+  outline: none;
+  border: none;
+  background-color: transparent;
+  color: rgb(63, 176, 214);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
