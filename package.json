@@ -49,17 +49,24 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@pqmcgill/dat-node": "3.5.22",
     "@rescripts/cli": "^0.0.12",
     "@rescripts/rescript-env": "^0.0.10",
     "app-root-dir": "^1.0.2",
     "concurrently": "^4.1.2",
+    "dat-ignore": "^2.1.2",
+    "debug": "^4.1.1",
     "electron": "^6.0.8",
     "electron-builder": "^21.2.0",
     "electron-is-dev": "^1.1.0",
+    "mirror-folder": "^3.0.0",
+    "pauls-dat-api": "^8.1.0",
     "pretty-hash": "^1.0.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-scripts": "3.1.1",
+    "speedometer": "^1.1.0",
+    "tmp": "^0.1.0",
     "typescript": "^3.6.3",
     "wait-on": "^3.3.0"
   }
