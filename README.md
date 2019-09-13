@@ -7,7 +7,7 @@
   - [x] rescripts for custom webpack config
   - [x] allow native node imports (fs, hyperdrive, etc.) in application
   - [x] npm scripts (dev, build, package, distribute)
-- [ ] Dynamically change wallpaper POC
+- [x] Dynamically change wallpaper POC
 - [ ] UI
   - [ ] display dat:// url with copy to clipboard action
   - [ ] input for connecting to another wallpaper set via it's dat:// url
