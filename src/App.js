@@ -49,6 +49,7 @@ function App() {
             dat.archive.readFile(img, function (err, content) {
               if (err) throw err
               setWallpaper(content, img)
+              setCurrentWallpaper(img)
             })
           }) 
         }, 5000)
