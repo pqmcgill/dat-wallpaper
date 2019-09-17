@@ -1,67 +1,49 @@
 import React, { useState, useEffect } from 'react'
 import prettyHash from 'pretty-hash'
 import { clipboard } from 'electron'
-import fs from 'fs'
-import tmp from 'tmp'
-import { watch } from 'pauls-dat-api'
 import Dat from '@pqmcgill/dat-node'
 import './App.css'
+import useInterval from './hooks/useInterval'
 import setWallpaper from './util/setWallpaper'
+import useLocalDat from './hooks/useLocalDat'
 
 function App() {
   const [newFilePath, setNewFilePath] = useState('')
   const [filePath, setFilePath] = useState('')
   const [currentWallpaper, setCurrentWallpaper] = useState({ isMine: false, img: 'foo.jpg'})
-  const [networkKey, setNetworkKey] = useState(null)
-  const [wallpaperKey, setWallpaperKey] = useState(null)
 
-  useEffect(() => {
-    if (filePath) {
-      console.log('mirroring filePath', filePath)
-      Dat(filePath, (err, dat) => {
+  const {
+    localDat,
+    localDatNetworkKey,
+    localDatReady
+  } = useLocalDat(filePath)
+
+  // const {
+  //   dat: publicDat,
+  //   networkKey: publicDatNetworkKey,
+  //   ready: publicDatReady
+  // } = useDat('./')
+
+  // Main Loop
+  useInterval(() => {
+    if (localDatReady) {
+      // pick a connected peer (including self) at random
+      // pick a wallpaper from that peer at random
+      // 
+      localDat.archive.readdir('/', (err, wallpapers) => {
         if (err) throw err
-        const watcher = dat.importFiles({ watch: true })
-        // watcher.on('put', (...args) => console.log('added file:', ...args))
-        // watcher.on('del', (...args) => console.log('deleted file:', ...args))
-        dat.archive.readdir('/', (err, ls) => {
+        const randIdx = Math.floor(Math.random() * Math.floor(wallpapers.length));
+        const img = wallpapers[randIdx]
+        // Manually download files via the hyperdrive API:
+        localDat.archive.readFile(img, function (err, content) {
           if (err) throw err
-          console.log('files', ls)
+          console.log(img)
+          setWallpaper(content, img)
+          setCurrentWallpaper(img)
         })
-        // const es = watch(dat.archive)
-        // es.on('data', ([e]) => {
-        //   if (e === 'changed') {
-        //     dat.archive.readdir('/', (err, ls) => {
-        //       if (err) throw err
-        //       console.log('files', ls)
-        //     }) 
-        //   } 
-        // })
-        dat.joinNetwork()
-        setWallpaperKey(dat.key.toString('hex'))
-        
-        // main loop
-        setInterval(() => {
-          dat.archive.readdir('/', (err, ls) => {
-            if (err) throw err
-            const rand = Math.floor(Math.random() * Math.floor(ls.length));
-            const img = ls[rand]
-            // Manually download files via the hyperdrive API:
-            dat.archive.readFile(img, function (err, content) {
-              if (err) throw err
-              setWallpaper(content, img)
-              setCurrentWallpaper(img)
-            })
-          }) 
-        }, 5000)
-      })
-
-      // TODO discover peers
-      Dat('./', { temp: true }, (err, dat) => {
-        dat.joinNetwork()
-        setNetworkKey(dat.key.toString('hex'))
-      })
+      }) 
     }
-  }, [filePath])
+  }, 5000)
 
   function handleLinkClick(link) {
     clipboard.writeText(link)
@@ -95,8 +77,8 @@ function App() {
       
       <h3>Share your url</h3>
       <p>
-        <button className="btn-link" onClick={handleLinkClick.bind(null, networkKey)}>
-          dat://{prettyHash(networkKey)}
+        <button className="btn-link" onClick={handleLinkClick.bind(null, localDatNetworkKey)}>
+          dat://{prettyHash(localDatNetworkKey)}
         </button>
       </p>
       
