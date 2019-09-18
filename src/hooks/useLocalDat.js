@@ -26,11 +26,7 @@ export default function useDat(key) {
         setReady(true)
       })
 
-      return () => {
-        if (watcher) {
-          watcher.off()
-        }
-      }
+      return watcher.off
     }
   }, [key])
 

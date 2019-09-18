@@ -6,6 +6,7 @@ import './App.css'
 import useInterval from './hooks/useInterval'
 import setWallpaper from './util/setWallpaper'
 import useLocalDat from './hooks/useLocalDat'
+import usePublicDat from './hooks/usePublicDat'
 
 function App() {
   const [newFilePath, setNewFilePath] = useState('')
@@ -18,11 +19,10 @@ function App() {
     localDatReady
   } = useLocalDat(filePath)
 
-  // const {
-  //   dat: publicDat,
-  //   networkKey: publicDatNetworkKey,
-  //   ready: publicDatReady
-  // } = useDat('./')
+  const { 
+    swarmConnection,
+    publicDatNetworkKey 
+  } = usePublicDat()
 
   // Main Loop
   useInterval(() => {
@@ -74,13 +74,19 @@ function App() {
   return (
     <div className="App">
       <h1>DatWallpaper</h1>
-      
-      <h3>Share your url</h3>
-      <p>
-        <button className="btn-link" onClick={handleLinkClick.bind(null, localDatNetworkKey)}>
-          dat://{prettyHash(localDatNetworkKey)}
-        </button>
-      </p>
+
+      { !swarmConnection 
+        ? <h2>Connecting...</h2> 
+        : <>
+          <h2>Connected!</h2>
+          <h3>Share your url</h3>
+          <p>
+            <button className="btn-link" onClick={handleLinkClick.bind(null, publicDatNetworkKey)}>
+              dat://{prettyHash(publicDatNetworkKey)}
+            </button>
+          </p>
+        </>
+      }
       
       <h3>Connect to a shared url</h3>
       <input type="text"/>
