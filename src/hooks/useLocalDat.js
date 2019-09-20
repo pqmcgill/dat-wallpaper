@@ -1,23 +1,24 @@
 import { useState, useEffect } from 'react'
 import Dat from '@pqmcgill/dat-node'
 
-export default function useDat(key) {
-  const [localDat, setDat] = useState()
-  const [localDatReady, setReady] = useState(false)
-  const [localDatNetworkKey, setNetworkKey] = useState()
+export default function useDat(filePath) {
+  const [dat, setDat] = useState()
+  const [ready, setReady] = useState(false)
+  const [networkKey, setNetworkKey] = useState()
 
   useEffect(() => {
-    if (key) {
+    if (filePath) {
       let watcher;
-      Dat(key, (err, dat) => {
+
+      Dat(filePath, (err, dat) => {
         if (err) throw err
 
         setDat(dat)
 
         // watch for changes at local wallpaper folder
         watcher = dat.importFiles({ watch: true })
-        watcher.on('put', (...args) => console.log('added file:', ...args))
-        watcher.on('del', (...args) => console.log('deleted file:', ...args))
+        watcher.on('put', handlePut)
+        watcher.on('del', handleDel)
         
         // join the swarm
         dat.joinNetwork()
@@ -26,13 +27,21 @@ export default function useDat(key) {
         setReady(true)
       })
 
-      return watcher.off
+      return () => {
+        if (watcher) {
+          watcher.off('put', handlePut)
+          watcher.off('del', handleDel)
+        }
+      }
+
+      function handlePut (...args) { console.log('added file:', ...args) }
+      function handleDel (...args) { console.log('deleted file:', ...args) }
     }
-  }, [key])
+  }, [filePath])
 
   return {
-    localDat,
-    localDatNetworkKey,
-    localDatReady
+    dat,
+    networkKey,
+    ready
   }
 }

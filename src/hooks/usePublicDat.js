@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react'
 import Dat from '@pqmcgill/dat-node'
 
 export default function useDat(remoteKey) {
-  const [publicDat, setDat] = useState()
-  const [publicDatReady, setReady] = useState(false)
-  const [publicDatNetworkKey, setNetworkKey] = useState()
-  const [swarmConnection, setConnection] = useState(false)
+  const [dat, setDat] = useState()
+  const [ready, setReady] = useState(false)
+  const [networkKey, setNetworkKey] = useState()
+  const [conn, setConnection] = useState(false)
 
   useEffect(() => {
     let opts = {
@@ -26,7 +26,6 @@ export default function useDat(remoteKey) {
       setDat(dat)
       // join the swarm
       dat.joinNetwork((err) => {
-        debugger;
         if (err) {
           throw err
         }
@@ -40,9 +39,9 @@ export default function useDat(remoteKey) {
   }, [remoteKey])
 
   return {
-    publicDat,
-    publicDatNetworkKey,
-    publicDatReady,
-    swarmConnection
+    dat,
+    networkKey,
+    ready,
+    conn
   }
 }
