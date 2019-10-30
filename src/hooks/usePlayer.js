@@ -8,7 +8,7 @@ function randomItem(list) {
   return list[Math.floor(Math.random() * Math.floor(list.length))]
 }
 
-export default function usePlayer(delay, localDat, peers = ['me', 'not me']) {
+export default function usePlayer(delay, localDat, peers) {
   const [currentWallpaper, setCurrentWallpaper] = useState()
   const cancelRef = useRef(false)
   
@@ -45,7 +45,7 @@ export default function usePlayer(delay, localDat, peers = ['me', 'not me']) {
       dat.archive.readFile(selectedWallpaperPath, (err, data) => {
         if (err) throw Error('error downloading tmp wallpaper: ' + err)
         if (!cancelRef.current) {
-          setWallpaper(data)
+          setWallpaper(data, selectedWallpaperPath)
           setCurrentWallpaper(selectedWallpaperPath)
           next()
         }
@@ -73,7 +73,6 @@ export default function usePlayer(delay, localDat, peers = ['me', 'not me']) {
     }
   }, [delay, start, stop])
   
-
   return {
     currentWallpaper
   }

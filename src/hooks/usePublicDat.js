@@ -13,13 +13,13 @@ export default function useDat(remoteKey) {
       sparse: true
     }
 
-    if (remoteKey) {
+    if (remoteKey !== 'new') {
       opts = {
         ...opts,
         key: remoteKey
       }
     }
-    // Open public dat
+    // Open public dat  
     Dat('./', opts, (err, dat) => {
       if (err) throw err
 
@@ -31,6 +31,11 @@ export default function useDat(remoteKey) {
         }
 
         setConnection(true)
+        
+        dat.network.on('connection', (...args) => {
+          console.log('connected', ...args)
+        })        
+
       })
 
       setNetworkKey(dat.key.toString('hex'))

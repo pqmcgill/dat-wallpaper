@@ -1,7 +1,4 @@
-const electron = require('electron');
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
-
+const { app, globalShortcut, BrowserWindow } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
 
@@ -21,8 +18,8 @@ function createWindow() {
   );
   if (isDev) {
     // Open the DevTools.
-    BrowserWindow.addDevToolsExtension('/Users/patrickmcgill//Library/Application\ Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.0.6_0');
-    mainWindow.webContents.openDevTools();
+    // BrowserWindow.addDevToolsExtension('/Users/patrickmcgill//Library/Application\ Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.0.6_0');
+    // mainWindow.webContents.openDevTools();
   }
   mainWindow.on('closed', () => mainWindow = null);
 }

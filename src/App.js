@@ -9,52 +9,70 @@ import usePersistence from './hooks/usePersistence'
 import FilePathConfig from './components/FilePathConfig'
 import PlayButton from './components/PlayButton'
 
-function App() {
-  const [filePath, setFilePath] = usePersistence('localFilePath', '')
+function PlayerSettings({ localDat, filePath, setFilePath, peers }) {
   const [delay, setDelay] = useState(null)
 
-  const localDat = useLocalDat(filePath)
-  const publicDat = usePublicDat()
-
   // Main Loop
-  const { currentWallpaper } = usePlayer(delay, localDat)
+  const { currentWallpaper } = usePlayer(delay, localDat, peers)
 
   function toggleDelay() {
     setDelay(delay ? null : 5000)
   }
 
   return (
-    <div className="App">
-      {/* Player */}
+    <>
       <h1>DatWallpaper</h1>
       <FilePathConfig filePath={filePath} onFilePathChange={setFilePath} />
       {localDat.ready && <PlayButton isPlaying={delay} onToggle={toggleDelay} />}
-
-      {/* Network */}
-      
-      {/* { !swarmConnection 
-        ? <h2>Connecting...</h2> 
-        : <>
-          <h2>Connected!</h2>
-          <h3>Share your url</h3>
-          <p>
-            <button className="btn-link" onClick={handleLinkClick.bind(null, publicDatNetworkKey)}>
-              dat://{prettyHash(publicDatNetworkKey)}
-            </button>
-          </p>
-        </>
-      } */}
-      
-      {/* <h3>Connect to a shared url</h3>
-      <input type="text"/> */}
-    <h3>Current Wallpaper</h3>
-    <p>
-      <button className="btn-link">
-        {prettyHash(currentWallpaper)}
-      </button>
-    </p>
-    </div>
+      <h3>Current Wallpaper</h3>
+      <p>
+        <button className="btn-link">
+          {prettyHash(currentWallpaper)}
+        </button>
+      </p>
+    </>
   );
+}
+
+function NewSession() {
+  const { conn, networkKey } = usePublicDat('new')
+
+  if (!conn) {
+    return <p>Connecting...</p>
+  }
+
+  return (
+    <>
+      <p>Connected</p>
+      <p>dat://{networkKey}</p>
+    </>
+  )
+}
+
+function NetworkSettings() {
+  return (
+    <>
+      <h3>Network Config</h3>
+      <p>Not Connected</p>
+      <button>Start New Session</button>
+      <button>Join Remote Session</button>
+      <NewSession />
+    </>
+  )
+}
+
+function App() {
+  const [filePath, setFilePath] = usePersistence('localFilePath', '')
+  const [peers, setPeers] = useState(['me', 'not me'])
+  const localDat = useLocalDat(filePath)
+
+  return (
+    <div className="App">
+      <PlayerSettings localDat={localDat} filePath={filePath} setFilePath={setFilePath} peers={peers}/>
+      <hr />
+      <NetworkSettings />
+    </div>
+  )
 }
 
 export default App
