@@ -13,7 +13,7 @@ function PlayerSettings({ localDat, filePath, setFilePath, peers }) {
   const [delay, setDelay] = useState(null);
 
   // Main Loop
-  const { currentWallpaper } = usePlayer(delay, localDat, peers);
+  const { currentWallpaper } = usePlayer(delay, localDat, Object.values(peers));
 
   function toggleDelay() {
     setDelay(delay ? null : 5000);
@@ -153,7 +153,7 @@ function Session({ setPeers, peers, owner, remoteKey, localDat }) {
 function App() {
   const [filePath, setFilePath] = usePersistence("localFilePath", "");
   const localDat = useLocalDat(filePath);
-  const [peers, setPeers] = useState({ 'me': true });
+  const [peers, setPeers] = useState({ 'me': 'me' });
 
   return (
     <div className="App">

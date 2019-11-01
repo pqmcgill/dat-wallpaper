@@ -20,7 +20,7 @@ export default function usePlayer(delay, localDat, peers) {
     } else {
       console.log('selected another peer')
       Dat(ram, { 
-        key: localDat.networkKey, // TODO: remove default when testing network functionality
+        key, // TODO: remove default when testing network functionality
         sparse: true 
       }, (err, dat) => {
         if (err) throw err
@@ -30,7 +30,7 @@ export default function usePlayer(delay, localDat, peers) {
         })
       })
     }
-  }, [peers, localDat.networkKey, localDat.dat])
+  }, [peers, localDat.dat])
   
   const ready = useCallback((cb) => { 
     if (localDat.ready) {
