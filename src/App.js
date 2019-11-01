@@ -138,7 +138,7 @@ function Session({ setPeers, owner, remoteKey }) {
         <h3>Connected to someone else's sesh</h3>
         <DatUrl url={`dat://${networkKey.toString("hex")}`} />
         <ul>
-          {peers.map((peer, i) => (
+          {Object.values(peers).map((peer, i) => (
             <li key={i}>{peer}</li>
           ))}
         </ul>

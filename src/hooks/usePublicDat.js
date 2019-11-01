@@ -36,7 +36,7 @@ export default function useDat(remoteKey) {
             ...peers,
             [peer.remoteId.toString('hex')]: remoteKey
           });
-          // peer.extension('handshake', '<MY_PRIVATE_KEY>')
+          peer.extension('handshake', Buffer.from('<MY_PRIVATE_KEY>'))
         } else if (type === "handshake") {
           // store the peer's remotekey
           setPeers({
