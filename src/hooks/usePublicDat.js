@@ -34,14 +34,14 @@ export default function useDat(remoteKey) {
           // send them your remotekey via 'handshake'
           setPeers({
             ...peers,
-            [peer.remoteId.toString()]: remoteKey
+            [peer.remoteId.toString('hex')]: remoteKey
           });
           // peer.extension('handshake', '<MY_PRIVATE_KEY>')
         } else if (type === "handshake") {
           // store the peer's remotekey
           setPeers({
             ...peers,
-            [peer.remoteId.toString()]: remoteKey
+            [peer.remoteId.toString('hex')]: remoteKey
           });
         } else {
           // nothing
