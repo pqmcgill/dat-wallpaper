@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import prettyHash from 'pretty-hash'
 import { clipboard } from 'electron'
 import './App.css'
@@ -50,15 +50,97 @@ function NewSession() {
 }
 
 function NetworkSettings() {
+  const [isSessionOpen, setSessionOpen] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
+  const [remoteKey, setRemoteKey] = useState(null);
+  const [showRemoteKeyInput, setShowRemoteKeyInput] = useState(false);
+
+  const closeSession = useCallback(() => {
+    setSessionOpen(false);
+    setIsOwner(false);
+    setRemoteKey(null);
+    setShowRemoteKeyInput(false);
+  }, [])
+
+  const startNewSession = useCallback(() => {
+    setSessionOpen(true);
+    setIsOwner(true);
+    setShowRemoteKeyInput(false);
+    setRemoteKey('new');
+  }, [])
+
+  const joinRemoteSession = useCallback(() => {
+    setIsOwner(false);
+    setShowRemoteKeyInput(true);
+  }, [])
+
+  const handleKeyInput = useCallback((e) => {
+    setRemoteKey(e.target.value);
+  }, [])
+  
+  const handleSubmit = useCallback(() => {
+    setSessionOpen(true);
+  }, [])
+
+  if (!isSessionOpen) {
+    return (
+      <>
+        <h3>Network Config</h3>
+        <p>Not Connected</p>
+        <button onClick={startNewSession}>Start New Session</button>
+        <button onClick={joinRemoteSession}>Join Remote Session</button>
+        { showRemoteKeyInput && (
+          <>
+            <input type="text" onChange={handleKeyInput} />
+            <button onClick={handleSubmit}>Join!</button>
+          </>
+        )}
+      </>
+    )
+  } else {
+    return (
+      <>
+        <h3>Network Config</h3>
+        <Session owner={isOwner} remoteKey={remoteKey} onClose={closeSession}/>
+      </>
+    )
+  }
+}
+
+function DatUrl(props) {
+  const handleLinkClick = useCallback(() => {
+    clipboard.writeText(props.url)
+    new Notification('You did it!', {
+      body: `You copied the link to your clipboard!`
+    })
+  }, [props.url])
   return (
-    <>
-      <h3>Network Config</h3>
-      <p>Not Connected</p>
-      <button>Start New Session</button>
-      <button>Join Remote Session</button>
-      <NewSession />
-    </>
+    <p>url: <button className="btn-link" onClick={handleLinkClick}>{ props.url }</button></p>
   )
+}
+
+function Session(props) {
+  const { conn, networkKey } = usePublicDat(props.owner ? 'new' : props.remoteKey);
+
+  if (!conn) {
+    return <p>Connecting...</p>
+  }
+
+  if (props.owner) {
+    return (
+      <>
+        <h3>Connected to my own sesh</h3>
+        <DatUrl url={`dat://${networkKey.toString('hex')}`} />
+      </>
+    )
+  } else {
+    return (
+      <>
+        <h3>Connected to someone else's sesh</h3>
+        <DatUrl url={`dat://${networkKey.toString('hex')}`} />
+      </>
+    )
+  }
 }
 
 function App() {

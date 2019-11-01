@@ -34,10 +34,10 @@
     "build": "rescripts build",
     "test": "rescripts test",
     "eject": "react-scripts eject",
-    "dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
-    "pack": "yarn build && electron-builder --dir",
-    "dist": "yarn build && electron-builder"
+    "pack": "npm build && electron-builder --dir",
+    "dist": "npm build && electron-builder"
   },
   "eslintConfig": {
     "extends": "react-app"
