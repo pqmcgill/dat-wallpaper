@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Dat from '@pqmcgill/dat-node'
 // import DatPeers from 'dat-peers';
 
@@ -11,9 +11,9 @@ export default function useDat(remoteKey) {
   const [conn, setConnection] = useState(false)
   const [newPeerListener, setNewPeerListener] = useState(null);
 
-  const onNewlyDiscoveredPeer = (cb) => {
+  const onNewlyDiscoveredPeer = useCallback((cb) => {
     setNewPeerListener(cb);
-  }
+  }, []);
 
   useEffect(() => {
     let opts = {
