@@ -2,12 +2,11 @@ import { useState, useEffect } from "react";
 import Dat from "@pqmcgill/dat-node";
 // import DatPeers from 'dat-peers';
 
-export default function useDat(remoteKey, localDat) {
+export default function useDat(remoteKey, localDat, peers, setPeers) {
   const [dat, setDat] = useState();
   const [ready, setReady] = useState(false);
   const [networkKey, setNetworkKey] = useState();
   const [conn, setConnection] = useState(false);
-  const [peers, setPeers] = useState({});
 
   useEffect(() => {
     let opts = {
