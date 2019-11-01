@@ -34,7 +34,7 @@ function PlayerSettings({ localDat, filePath, setFilePath, peers }) {
   );
 }
 
-function NetworkSettings({ setPeers }) {
+function NetworkSettings({ setPeers, localDat }) {
   const [isSessionOpen, setSessionOpen] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
   const [remoteKey, setRemoteKey] = useState(null);
@@ -91,6 +91,7 @@ function NetworkSettings({ setPeers }) {
           remoteKey={remoteKey}
           onClose={closeSession}
           setPeers={setPeers}
+          localDat={localDat}
         />
       </>
     );
@@ -114,8 +115,8 @@ function DatUrl(props) {
   );
 }
 
-function Session({ setPeers, owner, remoteKey }) {
-  const { conn, networkKey, peers } = usePublicDat(owner ? "new" : remoteKey);
+function Session({ setPeers, owner, remoteKey, localDat }) {
+  const { conn, networkKey, peers } = usePublicDat(owner ? "new" : remoteKey, localDat.key);
 
   useEffect(() => {
     setPeers([...Object.values(peers), "me"]);
@@ -139,7 +140,7 @@ function Session({ setPeers, owner, remoteKey }) {
         <DatUrl url={`dat://${networkKey.toString("hex")}`} />
         <ul>
           {Object.values(peers).map((peer, i) => (
-            <li key={i}>{peer}</li>
+            <li key={i}>{peer.toString('hex')}</li>
           ))}
         </ul>
       </>
@@ -161,7 +162,7 @@ function App() {
         peers={peers}
       />
       <hr />
-      <NetworkSettings setPeers={setPeers} />
+      <NetworkSettings setPeers={setPeers} localDat={localDat} />
     </div>
   );
 }

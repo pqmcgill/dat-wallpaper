@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Dat from "@pqmcgill/dat-node";
 // import DatPeers from 'dat-peers';
 
-export default function useDat(remoteKey) {
+export default function useDat(remoteKey, localDatKey) {
   const [dat, setDat] = useState();
   const [ready, setReady] = useState(false);
   const [networkKey, setNetworkKey] = useState();
@@ -64,7 +64,7 @@ export default function useDat(remoteKey) {
         });
 
         dat.archive.metadata.on("peer-add", peer => {
-          peer.extension("discovery", Buffer.from("hello world"));
+          peer.extension("discovery", );
         });
         setConnection(true);
       });
