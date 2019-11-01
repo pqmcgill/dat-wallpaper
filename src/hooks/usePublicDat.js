@@ -38,14 +38,13 @@ export default function useDat(remoteKey) {
         
         dat.network.on('connection', (conn, info) => {
           console.log('connected', conn, info);
-        })   
-        
-        dat.archive.metadata.on('peer-add', (peer) => {
-          console.log('peer added', peer);
-          peer.extension('discovery', Buffer.from('hello world!'));
-        });
 
-        dat.archive.metadata.on('extension', (type, msg) => {
+          dat.archive.extension('discovery', Buffer.from('hello world'));
+        })   
+
+        dat.archive.on('extension', (type, msg) => {
+          debugger;
+          console.log('')
           if (type === 'discovery') {
             console.log('It worked!', msg);
           }
