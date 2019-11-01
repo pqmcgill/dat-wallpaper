@@ -12,6 +12,7 @@ export default function useDat(remoteKey) {
   const [newPeerListener, setNewPeerListener] = useState(null);
 
   const onNewlyDiscoveredPeer = useCallback((cb) => {
+    console.log('here')
     setNewPeerListener(cb);
   }, []);
 

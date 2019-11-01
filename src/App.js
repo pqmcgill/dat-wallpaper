@@ -107,10 +107,12 @@ function DatUrl(props) {
 function Session(props) {
   const { conn, networkKey, onNewlyDiscoveredPeer } = usePublicDat(props.owner ? 'new' : props.remoteKey);
 
-  onNewlyDiscoveredPeer((peerId, key) => {
-    // do stuff
-    console.log('new peer', peerId, key);
-  })
+  useEffect(() => {
+    onNewlyDiscoveredPeer((peerId, key) => {
+      // do stuff
+      console.log('new peer', peerId, key);
+    })
+  }, [onNewlyDiscoveredPeer])
 
   if (!conn) {
     return <p>Connecting...</p>
