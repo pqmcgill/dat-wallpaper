@@ -34,7 +34,7 @@ function PlayerSettings({ localDat, filePath, setFilePath, peers }) {
   );
 }
 
-function NetworkSettings() {
+function NetworkSettings({ setPeers }) {
   const [isSessionOpen, setSessionOpen] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
   const [remoteKey, setRemoteKey] = useState(null);
@@ -86,7 +86,7 @@ function NetworkSettings() {
     return (
       <>
         <h3>Network Config</h3>
-        <Session owner={isOwner} remoteKey={remoteKey} onClose={closeSession}/>
+        <Session owner={isOwner} remoteKey={remoteKey} onClose={closeSession} setPeers={setPeers}/>
       </>
     )
   }
@@ -104,21 +104,18 @@ function DatUrl(props) {
   )
 }
 
-function Session(props) {
-  const { conn, networkKey, onNewlyDiscoveredPeer } = usePublicDat(props.owner ? 'new' : props.remoteKey);
-
+function Session({ setPeers, owner, remoteKey }) {
+  const { conn, networkKey, peers } = usePublicDat(owner ? 'new' : remoteKey);
+    
   useEffect(() => {
-    onNewlyDiscoveredPeer((peerId, key) => {
-      // do stuff
-      console.log('new peer', peerId, key);
-    })
-  }, [onNewlyDiscoveredPeer])
+    setPeers([...Object.values(peers), 'me'])
+  }, [setPeers, peers])
 
   if (!conn) {
     return <p>Connecting...</p>
   }
 
-  if (props.owner) {
+  if (owner) {
     return (
       <>
         <h3>Connected to my own sesh</h3>
@@ -130,6 +127,9 @@ function Session(props) {
       <>
         <h3>Connected to someone else's sesh</h3>
         <DatUrl url={`dat://${networkKey.toString('hex')}`} />
+        <ul>
+          { peers.map((peer, i) => <li key={i}>{ peer }</li>) }
+        </ul>
       </>
     )
   }
@@ -144,7 +144,7 @@ function App() {
     <div className="App">
       <PlayerSettings localDat={localDat} filePath={filePath} setFilePath={setFilePath} peers={peers}/>
       <hr />
-      <NetworkSettings />
+      <NetworkSettings setPeers={setPeers}/>
     </div>
   )
 }

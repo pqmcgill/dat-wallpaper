@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import Dat from '@pqmcgill/dat-node'
 // import DatPeers from 'dat-peers';
 
@@ -9,12 +9,7 @@ export default function useDat(remoteKey) {
   const [ready, setReady] = useState(false)
   const [networkKey, setNetworkKey] = useState()
   const [conn, setConnection] = useState(false)
-  const [newPeerListener, setNewPeerListener] = useState(null);
-
-  const onNewlyDiscoveredPeer = useCallback((cb) => {
-    console.log('here')
-    setNewPeerListener(cb);
-  }, []);
+  const [peers, setPeers] = useState({});
 
   useEffect(() => {
     let opts = {
@@ -37,19 +32,23 @@ export default function useDat(remoteKey) {
 
       
       dat.archive.on('extension', (type, remoteKey, peer) => {
-        if (newPeerListener) {
-          if (type === 'discovery') {
-            // store the peer's remotekey
-            newPeerListener(peer.id.toString(), remoteKey);
-            // send them your remotekey via 'handshake'
-            peer.extension('handshake', '<MY_PRIVATE_KEY>')
-          } else if (type === 'handshake') {
-            // store the peer's remotekey
-            newPeerListener(peer.id.toString(), remoteKey);
-          } else {
-            // nothing
-            console.warn('unsupported extension msg', type, remoteKey.toString('hex'))
-          }
+        if (type === 'discovery') {
+          // store the peer's remotekey
+          // send them your remotekey via 'handshake'
+          setPeers({
+            ...peers,
+            [peer.id.toString()]: remoteKey
+          });
+          peer.extension('handshake', '<MY_PRIVATE_KEY>')
+        } else if (type === 'handshake') {
+          // store the peer's remotekey
+          setPeers({
+            ...peers,
+            [peer.id.toString()]: remoteKey
+          });
+        } else {
+          // nothing
+          console.warn('unsupported extension msg', type, remoteKey.toString('hex'))
         }
       })
       
@@ -72,13 +71,13 @@ export default function useDat(remoteKey) {
       setNetworkKey(dat.key.toString('hex'))
       setReady(true)
     })
-  }, [remoteKey, newPeerListener])
+  }, [remoteKey, peers])
 
   return {
     dat,
     networkKey,
     ready,
     conn,
-    onNewlyDiscoveredPeer
+    peers
   }
 }
