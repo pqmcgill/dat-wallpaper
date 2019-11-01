@@ -72,7 +72,7 @@ export default function useDat(remoteKey) {
       setNetworkKey(dat.key.toString("hex"));
       setReady(true);
     });
-  }, [remoteKey, peers]);
+  }, [remoteKey]); // Watch out for inifinite loops, or risk crashing the entire OS
 
   return {
     dat,

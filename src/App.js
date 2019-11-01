@@ -118,7 +118,7 @@ function Session({ setPeers, owner, remoteKey }) {
   const { conn, networkKey, peers } = usePublicDat(owner ? "new" : remoteKey);
 
   useEffect(() => {
-    // setPeers([...Object.values(peers), "me"]);
+    setPeers([...Object.values(peers), "me"]);
   }, [setPeers, peers]);
 
   if (!conn) {
