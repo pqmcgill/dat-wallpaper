@@ -38,7 +38,7 @@ export default function useDat(remoteKey, localDat) {
               ...peers,
               [peer.remoteId.toString('hex')]: remoteKey
             });
-            peer.extension('handshake', localDat)
+            peer.extension('handshake', localDat.key)
           } else if (type === "handshake") {
             // store the peer's remotekey
             setPeers({
@@ -66,7 +66,7 @@ export default function useDat(remoteKey, localDat) {
           });
 
           dat.archive.metadata.on("peer-add", peer => {
-            peer.extension("discovery", localDat);
+            peer.extension("discovery", localDat.key);
           });
           setConnection(true);
         });
