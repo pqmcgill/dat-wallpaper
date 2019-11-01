@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react'
 import Dat from '@pqmcgill/dat-node'
+// import DatPeers from 'dat-peers';
+
+console.log('here', EventTarget, typeof EventTarget);
 
 export default function useDat(remoteKey) {
   const [dat, setDat] = useState()
@@ -10,7 +13,8 @@ export default function useDat(remoteKey) {
   useEffect(() => {
     let opts = {
       temp: true,
-      sparse: true
+      sparse: true,
+      extensions: ['discovery'],
     }
 
     if (remoteKey !== 'new') {
@@ -32,9 +36,20 @@ export default function useDat(remoteKey) {
 
         setConnection(true)
         
-        dat.network.on('connection', (...args) => {
-          console.log('connected', ...args)
-        })        
+        dat.network.on('connection', (conn, info) => {
+          console.log('connected', conn, info);
+        })   
+        
+        dat.archive.on('peer-add', (peer) => {
+          console.log('peer added', peer);
+          peer.extension('discovery', 'hello world!')
+        });
+
+        dat.archive.on('extension', (type, msg) => {
+          if (type === 'discovery') {
+            console.log('It worked!', msg);
+          }
+        })
 
       })
 

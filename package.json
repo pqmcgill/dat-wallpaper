@@ -26,7 +26,9 @@
       "./bins/**/*"
     ]
   },
-  "dependencies": {},
+  "dependencies": {
+    "dat-peers": "^2.0.0"
+  },
   "homepage": "./",
   "main": "public/electron.js",
   "scripts": {
