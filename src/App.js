@@ -35,7 +35,12 @@ function PlayerSettings({ localDat, filePath, setFilePath, peers }) {
 }
 
 function NewSession() {
-  const { conn, networkKey } = usePublicDat('new')
+  const { conn, networkKey, onNewlyDiscoveredPeer } = usePublicDat('new')
+
+  onNewlyDiscoveredPeer((peerId, key) => {
+    // do stuff
+    console.log('new peer', peerId, key);
+  })
 
   if (!conn) {
     return <p>Connecting...</p>

@@ -9,12 +9,17 @@ export default function useDat(remoteKey) {
   const [ready, setReady] = useState(false)
   const [networkKey, setNetworkKey] = useState()
   const [conn, setConnection] = useState(false)
+  const [newPeerListener, setNewPeerListener] = useState(null);
+
+  const onNewlyDiscoveredPeer = (cb) => {
+    setNewPeerListener(cb);
+  }
 
   useEffect(() => {
     let opts = {
       temp: true,
       sparse: true,
-      extensions: ['discovery'],
+      extensions: ['discovery', 'handshake'],
     }
 
     if (remoteKey !== 'new') {
@@ -30,9 +35,20 @@ export default function useDat(remoteKey) {
       setDat(dat)
 
       
-      dat.archive.on('extension', (type, msg) => {
-        if (type === 'discovery') {
-          console.log('It worked!', msg.toString());
+      dat.archive.on('extension', (type, remoteKey, peer) => {
+        if (newPeerListener) {
+          if (type === 'discovery') {
+            // store the peer's remotekey
+            newPeerListener(peer.id.toString(), remoteKey);
+            // send them your remotekey via 'handshake'
+            peer.extension('handshake', '<MY_PRIVATE_KEY>')
+          } else if (type === 'handshake') {
+            // store the peer's remotekey
+            newPeerListener(peer.id.toString(), remoteKey);
+          } else {
+            // nothing
+            console.warn('unsupported extension msg', type, remoteKey.toString('hex'))
+          }
         }
       })
       
@@ -43,8 +59,7 @@ export default function useDat(remoteKey) {
         }
         
         dat.network.on('connection', (conn, info) => {
-          console.log('connected', conn, info);
-  
+          // on connection stuff
         })
         
         dat.archive.metadata.on('peer-add', peer => {
@@ -56,12 +71,13 @@ export default function useDat(remoteKey) {
       setNetworkKey(dat.key.toString('hex'))
       setReady(true)
     })
-  }, [remoteKey])
+  }, [remoteKey, newPeerListener])
 
   return {
     dat,
     networkKey,
     ready,
-    conn
+    conn,
+    onNewlyDiscoveredPeer
   }
 }
