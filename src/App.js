@@ -34,26 +34,6 @@ function PlayerSettings({ localDat, filePath, setFilePath, peers }) {
   );
 }
 
-function NewSession() {
-  const { conn, networkKey, onNewlyDiscoveredPeer } = usePublicDat('new')
-
-  onNewlyDiscoveredPeer((peerId, key) => {
-    // do stuff
-    console.log('new peer', peerId, key);
-  })
-
-  if (!conn) {
-    return <p>Connecting...</p>
-  }
-
-  return (
-    <>
-      <p>Connected</p>
-      <p>dat://{networkKey}</p>
-    </>
-  )
-}
-
 function NetworkSettings() {
   const [isSessionOpen, setSessionOpen] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
@@ -125,7 +105,12 @@ function DatUrl(props) {
 }
 
 function Session(props) {
-  const { conn, networkKey } = usePublicDat(props.owner ? 'new' : props.remoteKey);
+  const { conn, networkKey, onNewlyDiscoveredPeer } = usePublicDat(props.owner ? 'new' : props.remoteKey);
+
+  onNewlyDiscoveredPeer((peerId, key) => {
+    // do stuff
+    console.log('new peer', peerId, key);
+  })
 
   if (!conn) {
     return <p>Connecting...</p>
