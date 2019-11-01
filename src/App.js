@@ -116,7 +116,7 @@ function DatUrl(props) {
 }
 
 function Session({ setPeers, owner, remoteKey, localDat }) {
-  const { conn, networkKey, peers } = usePublicDat(owner ? "new" : remoteKey, localDat.key);
+  const { conn, networkKey, peers } = usePublicDat(owner ? "new" : remoteKey, localDat.archive.key);
 
   useEffect(() => {
     setPeers([...Object.values(peers), "me"]);
