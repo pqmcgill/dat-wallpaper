@@ -28,28 +28,29 @@ export default function useDat(remoteKey) {
       if (err) throw err
 
       setDat(dat)
+
+      
+      dat.archive.on('extension', (type, msg) => {
+        if (type === 'discovery') {
+          console.log('It worked!', msg.toString());
+        }
+      })
+      
       // join the swarm
       dat.joinNetwork((err) => {
         if (err) {
           throw err
         }
-
-        setConnection(true)
         
         dat.network.on('connection', (conn, info) => {
           console.log('connected', conn, info);
-
-          dat.archive.extension('discovery', Buffer.from('hello world'));
-        })   
-
-        dat.archive.on('extension', (type, msg) => {
-          debugger;
-          console.log('')
-          if (type === 'discovery') {
-            console.log('It worked!', msg);
-          }
+  
         })
-
+        
+        dat.archive.metadata.on('peer-add', peer => {
+          peer.extension('discovery', Buffer.from('hello world'));
+        })
+        setConnection(true)
       })
 
       setNetworkKey(dat.key.toString('hex'))
