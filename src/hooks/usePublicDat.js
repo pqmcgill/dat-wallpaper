@@ -39,6 +39,7 @@ export default function useDat(remoteKey, localDat, peers, setPeers) {
             });
             peer.extension('handshake', localDat.key)
           } else if (type === "handshake") {
+            console.log('handshake', remoteKey.toString('hex'))
             // store the peer's remotekey
             setPeers({
               ...peers,
@@ -81,6 +82,5 @@ export default function useDat(remoteKey, localDat, peers, setPeers) {
     networkKey,
     ready,
     conn,
-    peers
   };
 }

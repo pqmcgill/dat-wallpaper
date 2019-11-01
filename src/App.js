@@ -128,6 +128,11 @@ function Session({ setPeers, peers, owner, remoteKey, localDat }) {
       <>
         <h3>Connected to my own sesh</h3>
         <DatUrl url={`dat://${networkKey.toString("hex")}`} />
+        <ul>
+          {Object.values(peers).map((peer, i) => (
+            <li key={i}>{peer.toString('hex')}</li>
+          ))}
+        </ul>
       </>
     );
   } else {
