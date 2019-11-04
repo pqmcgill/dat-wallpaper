@@ -5,7 +5,7 @@ import setWallpaper from '../util/setWallpaper'
 import useAsyncInterval from './useAsyncInterval'
 
 function randomItem(list) {
-  return list[Math.floor(Math.random() * Math.floor(list.length))]
+  return list[Math.floor(Math.random() * list.length)]
 }
 
 export default function usePlayer(delay, localDat, peers) {
@@ -23,7 +23,10 @@ export default function usePlayer(delay, localDat, peers) {
         key, // TODO: remove default when testing network functionality
         sparse: true 
       }, (err, dat) => {
-        if (err) throw err
+        if (err) {
+          console.error(err);
+          throw err;
+        }
         dat.joinNetwork((err) => {
           if (err) throw err
           cb(dat)
