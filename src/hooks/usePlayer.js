@@ -20,7 +20,7 @@ export default function usePlayer(delay, localDat, peers) {
     } else {
       console.log('selected another peer')
       Dat(ram, { 
-        key, // TODO: remove default when testing network functionality
+        key,
         sparse: true 
       }, (err, dat) => {
         if (err) {
@@ -50,7 +50,13 @@ export default function usePlayer(delay, localDat, peers) {
         if (!cancelRef.current) {
           setWallpaper(data, selectedWallpaperPath)
           setCurrentWallpaper(selectedWallpaperPath)
-          next()
+
+          // close dat to clear up memory if it's not the local dat
+          if (!dat.archive.writable) { 
+            dat.close(next) 
+          } else {
+            next();
+          }
         }
       })
     })
